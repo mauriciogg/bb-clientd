@@ -283,8 +283,9 @@ func main() {
 			)
 		}
 
+		// Called by grpc BazelOutputServiceServer ./pkg/proto/bazeloutputservice/bazel_output_service_grpc.pb.go in bb-remote-execution package
 		outputsDirectory := cd_vfs.NewBazelOutputServiceDirectory(
-			rootHandleAllocator,
+			rootHandleAllocator, // FUSE/NFS allocator - create by NewMountFromConfiguration Line 285
 			outputPathFactory,
 			bareContentAddressableStorage,
 			retryingContentAddressableStorage,
