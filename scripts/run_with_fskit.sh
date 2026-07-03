@@ -16,11 +16,11 @@
 #   - the BridgeFS sources at $DEVFS/InMemoryFS and bb-remote-execution at $BBRE
 set -euo pipefail
 
-DEVFS="${DEVFS:-$HOME/devfs}"
-BBRE="${BBRE:-$HOME/bb-remote-execution}"
+DEVFS="${DEVFS:-$HOME/Snapchat/Dev/virtualfs}"
+BBRE="${BBRE:-$HOME/Snapchat/Dev/bb-remote-execution}"
 CLIENTD="$(cd "$(dirname "$0")/.." && pwd)"
 CONFIG="$CLIENTD/configs/bb_clientd_fskit_local.jsonnet"
-MOUNTPOINT="$HOME/bb_clientd"
+MOUNTPOINT="$HOME/Snapchat/Dev/.cache/bb_clientd"
 INMEM="$DEVFS/InMemoryFS/scripts"
 
 say() { printf "\033[1;34m>> %s\033[0m\n" "$*"; }

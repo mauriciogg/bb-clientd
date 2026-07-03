@@ -1,0 +1,27 @@
+# Bazel flags to route this repo through a locally-running bb_clientd instead of
+# talking to the EngFlow cache directly. Use with configs/bb_clientd_engflow.jsonnet.
+#
+# Usage: import this file from a personal bazelrc, or pass the flags directly:
+#   bazel build --config=bbclientd //your/target
+#
+# Auth is fully handled by bb_clientd: it reads a fresh EngFlow sc-lca-1 token
+# from a file that the launch script's background refresher keeps up to date, and
+# reloads it every 60s. So there's NO --remote_cache_header here and no token to
+# pass on the command line — long builds no longer expire mid-run.
+# Do NOT combine with --config=rc_gcp (that points remote_cache at EngFlow directly).
+
+# Talk to bb_clientd's unix socket instead of EngFlow.
+build:bbclientd --remote_cache=unix:///Users/mgalindo/Snapchat/Dev/.cache/bb_clientd/grpc
+
+# Instance-name prefix bb_clientd strips before forwarding (-> EngFlow's empty
+# instance name). Keeps action-cache keys identical to direct-EngFlow builds.
+build:bbclientd --remote_instance_name=engflow
+
+# Make BES/build-event URIs point at the real remote, not the local socket.
+build:bbclientd --remote_bytestream_uri_prefix=engflow-cache-gcp-prod.sc-corp.net
+
+# Builds without the bytes: keep bazel-out/ in bb_clientd's NFS mount, lazily
+# materialized from CAS. Requires Bazel 7.2+.
+build:bbclientd --remote_download_minimal
+build:bbclientd --experimental_remote_output_service=unix:///Users/mgalindo/Snapchat/Dev/.cache/bb_clientd/grpc
+build:bbclientd --experimental_remote_output_service_output_path_prefix=/Users/mgalindo/Snapchat/Dev/bb_clientd/outputs

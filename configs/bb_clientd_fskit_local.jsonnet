@@ -8,7 +8,7 @@
 // the local fskit-bridge checkout and builds/installs BridgeFS first).
 
 local home = std.extVar('HOME');
-local cacheDirectory = home + '/.cache/bb_clientd';
+local cacheDirectory = home + '/Snapchat/Dev/.cache/bb_clientd';
 
 // The local RBE frontend (bb-storage / bb-remote-execution) — plaintext, no TLS.
 local rbe = { address: 'localhost:8980' };
@@ -41,7 +41,7 @@ local rbe = { address: 'localhost:8980' };
   // runs the fsmount gRPC server (which BridgeFS connects to) and, because
   // automount is set, performs the `mount` itself once the server is up.
   mount: {
-    mountPath: home + '/bb_clientd',
+    mountPath: home + '/Snapchat/Dev/bb_clientd',
     fskit: {
       server: {
         // BridgeFS connects here; must match Constants.serverHost:serverPort in
@@ -49,10 +49,10 @@ local rbe = { address: 'localhost:8980' };
         listenAddresses: ['localhost:9999'],
         authenticationPolicy: { allow: {} },
       },
-      automount: {
-        // FSShortName from the BridgeFS extension's Info.plist.
-        fsName: 'BridgeFS',
-      },
+      //automount: {
+      //  // FSShortName from the BridgeFS extension's Info.plist.
+      //  fsName: 'BridgeFS',
+      //},
     },
   },
 
