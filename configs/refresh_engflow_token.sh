@@ -13,8 +13,10 @@ INTERVAL="${REFRESH_INTERVAL:-1500}"   # 25 min; comfortably inside the 1h TTL
 EMAIL="$(whoami)@c.snap.com"
 
 mint() {
-  # --autoRefresh keeps the underlying personal creds fresh too.
-  snapaccess --email "$EMAIL" --autoRefresh jwt make --ttl=1h engflow.sc-corp.net
+  # --autoRefresh keeps the underlying personal creds fresh too. The timeout
+  # matters: a hung snapaccess (e.g. transient SSO/network stall) previously
+  # wedged this loop silently, letting the token expire mid-build.
+  timeout 60 snapaccess --email "$EMAIL" --autoRefresh jwt make --ttl=1h engflow.sc-corp.net
 }
 
 while true; do
